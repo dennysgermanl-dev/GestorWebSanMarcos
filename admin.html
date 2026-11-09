@@ -10,42 +10,290 @@
     <script>
         tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { sanmarcos: { red: '#730000', dark: '#4A0000', gold: '#D4AF37', light: '#F8F0F0' } } } } }
     </script>
-    <style> .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } </style>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans flex h-screen overflow-hidden">
+    <style> .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } 
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex z-20 shadow-sm">
-        <div class="h-20 flex items-center px-6 border-b border-gray-100">
-            <div class="w-10 h-10 bg-sanmarcos-red rounded-lg flex items-center justify-center text-white font-bold text-lg mr-3 shadow-md">SM</div>
-            <div>
-                <h1 class="font-bold text-gray-900 leading-none">Gestor Web</h1>
-                <span class="text-xs text-gray-500">Filial Chilca</span>
+
+/* =========================================
+   RESPONSIVIDAD GENERAL DEL GESTOR
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-width: 320px;
+}
+
+/* Evitar desbordamientos */
+main,
+.admin-section,
+.admin-section > div {
+    min-width: 0;
+}
+
+/* Tablas adaptables */
+.admin-section table {
+    min-width: 620px;
+}
+
+.admin-section .bg-white.overflow-hidden {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Imágenes y textos */
+img {
+    max-width: 100%;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+    min-width: 0;
+    font-size: 16px;
+}
+
+/* Transición del menú móvil */
+#sidebar {
+    transition: transform .3s ease-in-out;
+}
+
+#sidebarOverlay {
+    transition: opacity .3s ease;
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 1024px) {
+    .admin-content {
+        padding: 24px;
+    }
+}
+
+/* =========================================
+   CELULARES
+========================================= */
+
+@media (max-width: 767px) {
+
+    .admin-content {
+        padding: 16px;
+    }
+
+    .admin-section h3 {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+    }
+
+    /* Formularios de dos columnas pasan a una */
+    .admin-section .grid.grid-cols-2 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Encabezados de módulos */
+    .admin-section > .flex.justify-between {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .admin-section > .flex.justify-between button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Botones de formularios */
+    .admin-section .mt-8.flex.justify-end {
+        flex-wrap: wrap;
+    }
+
+    .admin-section .mt-8.flex.justify-end button {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
+    /* Tarjetas */
+    .admin-section .rounded-2xl {
+        border-radius: 14px;
+    }
+
+    /* Espaciado de formularios */
+    .admin-section .p-8 {
+        padding: 16px;
+    }
+
+    .admin-section .p-6 {
+        padding: 16px;
+    }
+
+    /* Banner */
+    #bannerContainer {
+        height: 220px;
+    }
+
+    /* Encabezado */
+    #tituloHeader {
+        font-size: 14px;
+        max-width: calc(100% - 100px);
+    }
+}
+
+/* Celulares pequeños */
+@media (max-width: 380px) {
+    .admin-content {
+        padding: 12px;
+    }
+
+    .admin-section .p-8,
+    .admin-section .p-6 {
+        padding: 12px;
+    }
+}
+
+
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans flex h-dvh overflow-hidden">
+
+    <!-- FONDO OSCURO DEL MENÚ MÓVIL -->
+    <div
+        id="sidebarOverlay"
+        class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"
+        onclick="cerrarMenu()">
+    </div>
+
+    <!-- MENÚ LATERAL -->
+    <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-white border-r border-gray-200 flex flex-col shadow-xl -translate-x-full md:translate-x-0 md:static md:w-64 md:max-w-none md:shrink-0 md:shadow-sm">
+
+        <!-- LOGO -->
+        <div class="h-20 min-h-20 flex items-center justify-between px-5 md:px-6 border-b border-gray-100">
+
+            <div class="flex items-center min-w-0">
+                <div class="w-10 h-10 shrink-0 bg-sanmarcos-red rounded-lg flex items-center justify-center text-white font-bold text-lg mr-3 shadow-md">
+                    SM
+                </div>
+
+                <div>
+                    <h1 class="font-bold text-gray-900 leading-none">
+                        Gestor Web
+                    </h1>
+                    <span class="text-xs text-gray-500">
+                        Filial Chilca
+                    </span>
+                </div>
             </div>
-        </div>
-        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto no-scrollbar" id="menuNavegacion">
-            <a href="#" data-target="sec-noticias" class="nav-item flex items-center px-4 py-3 bg-sanmarcos-red text-white rounded-xl shadow-md transition-colors"><i data-lucide="newspaper" class="w-5 h-5 mr-3"></i><span class="font-medium">Noticias</span></a>
-            <a href="#" data-target="sec-proyectos" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors"><i data-lucide="briefcase" class="w-5 h-5 mr-3"></i><span class="font-medium">Proyectos</span></a>
-            <a href="#" data-target="sec-docentes" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span class="font-medium">Docentes</span></a>
-            <a href="#" data-target="sec-config" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors"><i data-lucide="settings" class="w-5 h-5 mr-3"></i><span class="font-medium">Configuración</span></a>
-        </nav>
-        <div class="p-4 border-t border-gray-100">
-            <button onclick="window.logout()" class="flex items-center w-full px-4 py-3 text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-600 transition-colors">
-                <i data-lucide="log-out" class="w-5 h-5 mr-3"></i><span class="font-medium">Cerrar Sesión</span>
+
+            <!-- CERRAR MENÚ EN MÓVILES -->
+            <button
+                onclick="cerrarMenu()"
+                class="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-500"
+                aria-label="Cerrar menú">
+
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
+
         </div>
+
+        <!-- NAVEGACIÓN -->
+        <nav
+            class="flex-1 px-4 py-6 space-y-2 overflow-y-auto no-scrollbar"
+            id="menuNavegacion">
+
+            <a href="#" data-target="sec-noticias"
+                class="nav-item flex items-center px-4 py-3 bg-sanmarcos-red text-white rounded-xl shadow-md transition-colors">
+
+                <i data-lucide="newspaper" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Noticias</span>
+            </a>
+
+            <a href="#" data-target="sec-proyectos"
+                class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors">
+
+                <i data-lucide="briefcase" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Proyectos</span>
+            </a>
+
+            <a href="#" data-target="sec-docentes"
+                class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors">
+
+                <i data-lucide="users" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Docentes</span>
+            </a>
+
+            <a href="#" data-target="sec-config"
+                class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors">
+
+                <i data-lucide="settings" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Configuración</span>
+            </a>
+
+        </nav>
+
+        <!-- CERRAR SESIÓN -->
+        <div class="p-4 border-t border-gray-100">
+
+            <button
+                onclick="window.logout()"
+                class="flex items-center w-full px-4 py-3 text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-600 transition-colors">
+
+                <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
+                <span class="font-medium">Cerrar Sesión</span>
+            </button>
+
+        </div>
+
     </aside>
 
-    <!-- Contenido Principal -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 z-10">
-            <h2 id="tituloHeader" class="text-xl font-semibold text-gray-800 hidden md:block">Módulo de Noticias y Comunicados</h2>
-            <div class="h-8 w-8 rounded-full bg-sanmarcos-gold text-white flex items-center justify-center font-bold ml-auto">A</div>
-        </header>
 
-        <div class="flex-1 overflow-y-auto p-8 bg-gray-50 relative">
-            <div class="max-w-6xl mx-auto space-y-8">
-                
+  <!-- CONTENIDO PRINCIPAL -->
+<main class="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden">
+
+    <!-- HEADER -->
+    <header class="min-h-16 md:h-20 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-8 py-3 md:py-0 shrink-0 z-10">
+
+        <div class="flex items-center gap-3 min-w-0">
+
+            <!-- BOTÓN MENÚ MÓVIL -->
+            <button
+                onclick="abrirMenu()"
+                class="md:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-700 shrink-0"
+                aria-label="Abrir menú">
+
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+
+            <!-- TÍTULO -->
+            <h2
+                id="tituloHeader"
+                class="text-sm sm:text-base md:text-xl font-semibold text-gray-800 truncate">
+
+                Módulo de Noticias y Comunicados
+            </h2>
+
+        </div>
+
+        <!-- PERFIL -->
+        <div class="h-9 w-9 shrink-0 rounded-full bg-sanmarcos-gold text-white flex items-center justify-center font-bold ml-3">
+            A
+        </div>
+
+    </header>
+<!-- ÁREA DE CONTENIDO -->
+<div class="admin-content flex-1 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden p-4 md:p-8 bg-gray-50 relative">
+
+    <div class="max-w-6xl mx-auto space-y-8 min-w-0">
                 <!-- ============================ MÓDULO NOTICIAS ============================ -->
                 <div id="sec-noticias" class="admin-section block">
                     <div class="flex justify-between items-center mb-6">
@@ -256,5 +504,61 @@
 
     <script type="module" src="gestorweb.js"></script>
     <script>lucide.createIcons();</script>
+    <script>
+/* =========================================
+   NAVEGACIÓN RESPONSIVE
+========================================= */
+
+function abrirMenu() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    sidebar.classList.remove("-translate-x-full");
+    overlay.classList.remove("hidden");
+
+    document.body.classList.add("overflow-hidden");
+}
+
+function cerrarMenu() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    sidebar.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+
+    document.body.classList.remove("overflow-hidden");
+}
+
+// Cerrar menú al seleccionar un módulo
+document.querySelectorAll("#menuNavegacion .nav-item").forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        if (window.innerWidth < 768) {
+            cerrarMenu();
+        }
+
+    });
+
+});
+
+// Cerrar menú al regresar a escritorio
+window.addEventListener("resize", () => {
+
+    if (window.innerWidth >= 768) {
+        cerrarMenu();
+    }
+
+});
+
+// Cerrar menú con Escape
+document.addEventListener("keydown", (e) => {
+
+    if (e.key === "Escape") {
+        cerrarMenu();
+    }
+
+});
+</script>
 </body>
 </html>
