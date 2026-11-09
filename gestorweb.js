@@ -76,13 +76,13 @@ navItems.forEach(item => {
 
 async function verificarSesion() {
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session && !window.location.href.includes("login.html")) {
-        window.location.href = "login.html";
+    if (!session && !window.location.href.includes("index.html")) {
+        window.location.href = "index.html";
     } else if (session) {
         cargarNoticias(); cargarProyectos(); cargarDocentes(); cargarConfiguracion();
     }
 }
-window.logout = async function() { await supabase.auth.signOut(); window.location.href = "login.html"; };
+window.logout = async function() { await supabase.auth.signOut(); window.location.href = "index.html"; };
 document.addEventListener("DOMContentLoaded", verificarSesion);
 
 // ==========================================
