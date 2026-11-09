@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Web | UNMSM Filial Chilca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { sanmarcos: { red: '#730000', dark: '#4A0000', gold: '#D4AF37', light: '#F8F0F0' } } } } }
+    </script>
+    <style> .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex z-20 shadow-sm">
+        <div class="h-20 flex items-center px-6 border-b border-gray-100">
+            <div class="w-10 h-10 bg-sanmarcos-red rounded-lg flex items-center justify-center text-white font-bold text-lg mr-3 shadow-md">SM</div>
+            <div>
+                <h1 class="font-bold text-gray-900 leading-none">Gestor Web</h1>
+                <span class="text-xs text-gray-500">Filial Chilca</span>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto no-scrollbar" id="menuNavegacion">
+            <a href="#" data-target="sec-noticias" class="nav-item flex items-center px-4 py-3 bg-sanmarcos-red text-white rounded-xl shadow-md transition-colors"><i data-lucide="newspaper" class="w-5 h-5 mr-3"></i><span class="font-medium">Noticias</span></a>
+            <a href="#" data-target="sec-proyectos" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors"><i data-lucide="briefcase" class="w-5 h-5 mr-3"></i><span class="font-medium">Proyectos</span></a>
+            <a href="#" data-target="sec-docentes" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors"><i data-lucide="users" class="w-5 h-5 mr-3"></i><span class="font-medium">Docentes</span></a>
+            <a href="#" data-target="sec-config" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-sanmarcos-light hover:text-sanmarcos-red rounded-xl transition-colors"><i data-lucide="settings" class="w-5 h-5 mr-3"></i><span class="font-medium">Configuración</span></a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="window.logout()" class="flex items-center w-full px-4 py-3 text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-600 transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3"></i><span class="font-medium">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 z-10">
+            <h2 id="tituloHeader" class="text-xl font-semibold text-gray-800 hidden md:block">Módulo de Noticias y Comunicados</h2>
+            <div class="h-8 w-8 rounded-full bg-sanmarcos-gold text-white flex items-center justify-center font-bold ml-auto">A</div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 bg-gray-50 relative">
+            <div class="max-w-6xl mx-auto space-y-8">
+                
+                <!-- ============================ MÓDULO NOTICIAS ============================ -->
+                <div id="sec-noticias" class="admin-section block">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Gestión de Publicaciones</h3>
+                        <button onclick="document.getElementById('formNoticiaCard').classList.toggle('hidden'); limpiarFormularioNoticia();" class="bg-sanmarcos-red hover:bg-sanmarcos-dark text-white px-5 py-2.5 rounded-lg font-medium shadow-lg transition-all flex items-center">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Nueva Noticia
+                        </button>
+                    </div>
+
+                    <div id="formNoticiaCard" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hidden transition-all mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-6 border-b pb-4">Redactar Publicación</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-5">
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Título</label><input type="text" id="tituloNoticia" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Categoría</label><select id="categoriaNoticia" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"><option value="Comunicado Oficial">Comunicado Oficial</option><option value="Evento Académico">Evento Académico</option><option value="Logros y Proyectos">Logros y Proyectos</option></select></div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Fecha</label><input type="date" id="fechaNoticia" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                </div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Autor / Dependencia</label><input type="text" id="autorNoticia" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Contenido</label><textarea id="contenidoNoticia" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none resize-none"></textarea></div>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <label class="block text-sm font-semibold text-gray-700 mb-4">Multimedia (Hasta 3 imágenes)</label>
+                                <div class="space-y-4">
+                                    <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-100 transition cursor-pointer"><input type="file" id="imagenNoticia1" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('img1-txt').innerText = this.files[0].name"><i data-lucide="image" class="w-8 h-8 mx-auto text-gray-400 mb-2"></i><p id="img1-txt" class="text-sm font-medium text-gray-700">Subir Imagen Destacada</p></div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-100 transition cursor-pointer"><input type="file" id="imagenNoticia2" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('img2-txt').innerText = this.files[0].name"><i data-lucide="image-plus" class="w-6 h-6 mx-auto text-gray-400 mb-1"></i><p id="img2-txt" class="text-xs font-medium text-gray-600">Imagen 2 (Opcional)</p></div>
+                                        <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-100 transition cursor-pointer"><input type="file" id="imagenNoticia3" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('img3-txt').innerText = this.files[0].name"><i data-lucide="image-plus" class="w-6 h-6 mx-auto text-gray-400 mb-1"></i><p id="img3-txt" class="text-xs font-medium text-gray-600">Imagen 3 (Opcional)</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-end gap-3 border-t pt-5">
+                            <button onclick="document.getElementById('formNoticiaCard').classList.add('hidden')" class="px-5 py-2.5 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition">Cancelar</button>
+                            <button id="btnGuardarNoticia" class="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-lg font-medium shadow-md transition flex items-center"><i data-lucide="save" class="w-4 h-4 mr-2"></i> Guardar Publicación</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider"><th class="px-6 py-4 font-semibold">Noticia / Título</th><th class="px-6 py-4 font-semibold">Categoría</th><th class="px-6 py-4 font-semibold">Fecha</th><th class="px-6 py-4 font-semibold text-right">Acciones</th></tr></thead>
+                            <tbody id="tablaNoticiasBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================ MÓDULO PROYECTOS ============================ -->
+                <div id="sec-proyectos" class="admin-section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Proyectos de Alumnos</h3>
+                        <button onclick="document.getElementById('formProyectoCard').classList.toggle('hidden'); limpiarFormularioProyecto();" class="bg-sanmarcos-red hover:bg-sanmarcos-dark text-white px-5 py-2.5 rounded-lg font-medium shadow-lg transition-all flex items-center">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Nuevo Proyecto
+                        </button>
+                    </div>
+
+                    <div id="formProyectoCard" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hidden transition-all mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-6 border-b pb-4">Registrar Proyecto</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-5">
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Título del Proyecto</label><input type="text" id="tituloProyecto" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Escuela Profesional</label>
+                                        <select id="escuelaProyecto" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none">
+                                            <option value="Investigación Operativa">Investigación Operativa</option><option value="Administración">Administración</option><option value="Ingeniería Eléctrica">Ingeniería Eléctrica</option><option value="Psicología">Psicología</option><option value="Contabilidad">Contabilidad</option><option value="Ingeniería Industrial">Ingeniería Industrial</option><option value="Derecho">Derecho</option>
+                                        </select>
+                                    </div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Autores</label><input type="text" id="autoresProyecto" placeholder="Ej. Dennys German Lescano" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                </div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Enlace Externo (Opcional)</label><input type="url" id="enlaceProyecto" placeholder="https://youtube.com/... o Drive" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Descripción</label><textarea id="descProyecto" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none resize-none"></textarea></div>
+                            </div>
+                            
+                            <!-- NUEVA CAJA DE MULTIMEDIA Y PDF -->
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 space-y-4">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Archivos del Proyecto</label>
+                                
+                                <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-5 text-center hover:bg-gray-100 transition cursor-pointer flex flex-col justify-center items-center">
+                                    <input type="file" id="imagenProyecto" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('imgProy-txt').innerText = this.files[0].name">
+                                    <i data-lucide="image" class="w-6 h-6 mx-auto text-gray-400 mb-2"></i>
+                                    <p id="imgProy-txt" class="text-sm font-medium text-gray-700">Subir Captura/Portada</p>
+                                </div>
+
+                                <div class="relative border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-xl p-5 text-center hover:bg-blue-50 transition cursor-pointer flex flex-col justify-center items-center">
+                                    <input type="file" id="pdfProyecto" accept="application/pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('pdfProy-txt').innerText = this.files[0].name">
+                                    <i data-lucide="file-text" class="w-6 h-6 mx-auto text-blue-400 mb-2"></i>
+                                    <p id="pdfProy-txt" class="text-sm font-medium text-blue-700">Subir Documento (Solo PDF)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-end gap-3 border-t pt-5">
+                            <button onclick="document.getElementById('formProyectoCard').classList.add('hidden')" class="px-5 py-2.5 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition">Cancelar</button>
+                            <button id="btnGuardarProyecto" class="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-lg font-medium shadow-md transition flex items-center"><i data-lucide="save" class="w-4 h-4 mr-2"></i> Guardar Proyecto</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider"><th class="px-6 py-4 font-semibold">Proyecto</th><th class="px-6 py-4 font-semibold">Escuela / Autores</th><th class="px-6 py-4 font-semibold text-right">Acciones</th></tr></thead>
+                            <tbody id="tablaProyectosBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================ MÓDULO DOCENTES ============================ -->
+                <!-- (Idéntico a antes) -->
+                <div id="sec-docentes" class="admin-section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Directorio Docente</h3>
+                        <button onclick="document.getElementById('formDocenteCard').classList.toggle('hidden'); limpiarFormularioDocente();" class="bg-sanmarcos-red hover:bg-sanmarcos-dark text-white px-5 py-2.5 rounded-lg font-medium shadow-lg transition-all flex items-center">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Nuevo Docente
+                        </button>
+                    </div>
+
+                    <div id="formDocenteCard" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hidden transition-all mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-6 border-b pb-4">Registrar Docente</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-5">
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Nombre Completo</label><input type="text" id="nombreDocente" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Grado Académico</label>
+                                        <select id="gradoDocente" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none">
+                                            <option value="Magíster">Magíster</option><option value="Doctor">Doctor</option><option value="Ingeniero">Ingeniero</option><option value="Licenciado">Licenciado</option>
+                                        </select>
+                                    </div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Correo Institucional</label><input type="email" id="correoDocente" placeholder="@unmsm.edu.pe" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                </div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Escuelas donde enseña</label><input type="text" id="escuelasDocente" placeholder="Ej. Ing. Industrial, Administración" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Cursos que dicta</label><input type="text" id="cursosDocente" placeholder="Ej. Matemática Financiera, Operaciones" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none"></div>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center items-center">
+                                <label class="block text-sm font-semibold text-gray-700 mb-4 w-full text-left">Foto del Docente</label>
+                                <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-100 transition cursor-pointer w-full h-full flex flex-col justify-center items-center">
+                                    <input type="file" id="fotoDocente" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('imgDoc-txt').innerText = this.files[0].name">
+                                    <i data-lucide="camera" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
+                                    <p id="imgDoc-txt" class="text-sm font-medium text-gray-700">Subir Fotografía</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-end gap-3 border-t pt-5">
+                            <button onclick="document.getElementById('formDocenteCard').classList.add('hidden')" class="px-5 py-2.5 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition">Cancelar</button>
+                            <button id="btnGuardarDocente" class="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-lg font-medium shadow-md transition flex items-center"><i data-lucide="save" class="w-4 h-4 mr-2"></i> Guardar Docente</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider"><th class="px-6 py-4 font-semibold">Docente</th><th class="px-6 py-4 font-semibold">Escuelas / Cursos</th><th class="px-6 py-4 font-semibold text-right">Acciones</th></tr></thead>
+                            <tbody id="tablaDocentesBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================ MÓDULO CONFIGURACIÓN (NUEVO DISEÑO INTERACTIVO) ============================ -->
+                <div id="sec-config" class="admin-section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Configuración Institucional</h3>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                        <input type="hidden" id="configId">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="configFormFields">
+                            <div class="space-y-5">
+                                <h4 class="font-bold text-gray-800 border-b pb-2">Datos de Contacto y Redes</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Teléfono Sedé</label><input type="text" id="confTelefono" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none disabled:bg-gray-100"></div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Correo Oficial</label><input type="email" id="confCorreo" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none disabled:bg-gray-100"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Facebook URL</label><input type="url" id="confFb" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none disabled:bg-gray-100"></div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Instagram URL</label><input type="url" id="confIg" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none disabled:bg-gray-100"></div>
+                                </div>
+                                <h4 class="font-bold text-gray-800 border-b pb-2 pt-4">Identidad</h4>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Misión</label><textarea id="confMision" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none disabled:bg-gray-100"></textarea></div>
+                                <div><label class="block text-sm font-semibold text-gray-700 mb-1">Visión</label><textarea id="confVision" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-sanmarcos-red/50 outline-none disabled:bg-gray-100"></textarea></div>
+                            </div>
+                            
+                            <div class="space-y-5">
+                                <h4 class="font-bold text-gray-800 border-b pb-2">Banner Principal (Página Pública)</h4>
+                                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex flex-col justify-center items-center h-64 relative overflow-hidden" id="bannerContainer">
+                                    <!-- Aquí se mostrará la imagen de fondo si existe, usando JS -->
+                                    <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-100 transition cursor-pointer w-full h-full flex flex-col justify-center items-center bg-white/90 backdrop-blur-sm z-10" id="confBannerDiv">
+                                        <input type="file" id="confBanner" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" onchange="document.getElementById('imgConf-txt').innerText = this.files[0].name">
+                                        <i data-lucide="monitor" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
+                                        <p id="imgConf-txt" class="text-sm font-medium text-gray-700">Actualizar Foto de Portada</p>
+                                        <p class="text-xs text-gray-500 mt-2">Recomendado: 1920x1080px</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- BOTONES DINÁMICOS DE CONFIGURACIÓN -->
+                        <div class="mt-8 flex justify-end gap-3 border-t pt-5">
+                            <button id="btnEditarConfig" class="hidden bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium shadow-md transition flex items-center"><i data-lucide="edit" class="w-4 h-4 mr-2"></i> Habilitar Edición</button>
+                            <button id="btnEliminarConfig" class="hidden bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg font-medium shadow-md transition flex items-center"><i data-lucide="trash-2" class="w-4 h-4 mr-2"></i> Eliminar Datos</button>
+                            
+                            <button id="btnCancelarConfig" class="hidden px-5 py-2.5 text-gray-600 font-medium hover:bg-gray-100 rounded-lg transition">Cancelar</button>
+                            <button id="btnGuardarConfig" class="bg-sanmarcos-red hover:bg-sanmarcos-dark text-white px-8 py-3 rounded-lg font-medium shadow-md transition flex items-center"><i data-lucide="save" class="w-5 h-5 mr-2"></i> Guardar Configuración</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="gestorweb.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
